@@ -57,18 +57,19 @@ function createStartingBoard() {
         return array;
     }
 
-    //shuffle(myGraph.nodes);
+    shuffle(myGraph.nodes);
 
-    //shuffle(aspect_graph.nodes)
+    shuffle(aspect_graph.nodes)
 
-    //todo replace with random once done
-    //myGraph.nodes[0].set_type(getRandomAspect());
-    //myGraph.nodes[1].set_type(getRandomAspect());
+    myGraph.nodes[0].set_type(getRandomAspect());
+    myGraph.nodes[1].set_type(getRandomAspect());
 
     // REMOVE
-    myGraph.get_node_from_name("x4y2").set_type("water");
-    myGraph.get_node_from_name("x4y4").set_type("water");
+    //myGraph.get_node_from_name("x4y2").set_type("water");
+    //myGraph.get_node_from_name("x4y4").set_type("water");
     // REMOVE
+
+    console.log(myGraph.BFS(myGraph.nodes[0], myGraph.nodes[1]))
 
     original_nodes = myGraph.nodes;
 

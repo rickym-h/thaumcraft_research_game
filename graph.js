@@ -54,7 +54,6 @@ class Graph {
 
     BFS (start, end) {
         let targetType = end.type;
-        console.log("start: " + start.name + " end: " + end.name)
         let queue = [[start]];
 
         function nodeInPath(nodeName, pathSoFar) {
@@ -70,10 +69,8 @@ class Graph {
             let pathSoFar = queue.shift();
             let currentNode = pathSoFar[pathSoFar.length-1];
             let possibleAdjacentAspects = aspect_graph.edges[currentNode.type];
-            console.log(possibleAdjacentAspects)
             // Get surrounding nodes
             for (let adjacentNodeName of this.get_adjacent_nodes(currentNode.name)) {
-                console.log(adjacentNodeName)
                 let adjacentNode = this.get_node_from_name(adjacentNodeName)
                 if ((adjacentNode.type === "empty") && (!nodeInPath(adjacentNodeName, pathSoFar))) {
                     // node is valid to add to path
@@ -91,10 +88,7 @@ class Graph {
             }
 
         }
-
         return "NOT FOUND"
-
-
     }
 
     getStartAndEnd() {

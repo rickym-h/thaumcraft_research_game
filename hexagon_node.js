@@ -21,12 +21,39 @@ class hNode {
     }
 
     get_surrounding_node_names() {
-        let upLeft = getNameFromPos(this.x-1, this.y-1);
-        let upRight = getNameFromPos(this.x-1, this.y);
-        let left = getNameFromPos(this.x, this.y-1);
-        let right = getNameFromPos(this.x, this.y+1);
-        let downLeft = getNameFromPos(this.x+1, this.y-1);
-        let downRight = getNameFromPos(this.x+1, this.y);
+        let upLeft;
+        let upRight;
+        let left;
+        let right;
+        let downLeft;
+        let downRight;
+        switch(true) {
+            case this.x < 4:
+                upLeft = getNameFromPos(this.x-1, this.y-1);
+                upRight = getNameFromPos(this.x-1, this.y);
+                left = getNameFromPos(this.x, this.y-1);
+                right = getNameFromPos(this.x, this.y+1);
+                downLeft = getNameFromPos(this.x+1, this.y);
+                downRight = getNameFromPos(this.x+1, this.y+1);
+                break;
+            case this.x === 4:
+                upLeft = getNameFromPos(this.x-1, this.y-1);
+                upRight = getNameFromPos(this.x-1, this.y);
+                left = getNameFromPos(this.x, this.y-1);
+                right = getNameFromPos(this.x, this.y+1);
+                downLeft = getNameFromPos(this.x+1, this.y-1);
+                downRight = getNameFromPos(this.x+1, this.y);
+                break;
+            case this.x > 4:
+                upLeft = getNameFromPos(this.x-1, this.y);
+                upRight = getNameFromPos(this.x-1, this.y+1);
+                left = getNameFromPos(this.x, this.y-1);
+                right = getNameFromPos(this.x, this.y+1);
+                downLeft = getNameFromPos(this.x+1, this.y-1);
+                downRight = getNameFromPos(this.x+1, this.y);
+                break;
+            default:
+        }
         let list = [upLeft, upRight, left, right, downLeft, downRight]
         return list;
     }
