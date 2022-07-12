@@ -28,7 +28,17 @@ function createStartingBoard() {
         myGraph.rows++;
     }
 
-    // todo add edges
+    for (let node of myGraph.nodes) {
+        for (let check of node.get_surrounding_node_names()) {
+            if (myGraph.get_node_from_name(check) !== "NODE NOT FOUND") {
+                myGraph.add_edge(node.name, myGraph.get_node_from_name(check).name)
+            }
+        }
+    }
+
+    console.log(myGraph.edges)
+
+
     return myGraph;
 
 }
@@ -41,22 +51,6 @@ function initBoard(graph) {
     }
     for (let node of graph.nodes) {
         matrix[node.x][node.y] = node;
-    }
-
-
-    function createHexagonNode() {
-        let hex = document.createElement("div");
-        hex.classList.toggle("hex");
-        let t = document.createElement("div");
-        t.classList.toggle("top");
-        hex.appendChild(t);
-        let m = document.createElement("div");
-        m.classList.toggle("middle");
-        hex.appendChild(m);
-        let b = document.createElement("div");
-        b.classList.toggle("bottom");
-        hex.appendChild(b);
-        return hex;
     }
 
     for (let row of matrix) {
@@ -77,6 +71,15 @@ function initBoard(graph) {
             hex.appendChild(t);
             hex.appendChild(m);
             hex.appendChild(b);
+
+
+            hex.addEventListener("click", function () {
+                console.log(i.name)
+                console.log(graph.edges)
+                let adjacent = graph.edges[i.name];
+                console.log(adjacent);
+            })
+
 
 
             hexRow.appendChild(hex);

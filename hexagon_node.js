@@ -1,3 +1,7 @@
+function getNameFromPos(x,y) {
+    return "x"+x.toString()+"y"+y.toString();
+}
+
 class hNode {
     constructor(x, y) {
         this.name = "x"+x.toString()+"y"+y.toString();
@@ -13,5 +17,16 @@ class hNode {
 
     set_type(aspect) {
         this.type = aspect;
+    }
+
+    get_surrounding_node_names() {
+        let upLeft = getNameFromPos(this.x-1, this.y-1);
+        let upRight = getNameFromPos(this.x-1, this.y);
+        let left = getNameFromPos(this.x, this.y-1);
+        let right = getNameFromPos(this.x, this.y+1);
+        let downLeft = getNameFromPos(this.x+1, this.y-1);
+        let downRight = getNameFromPos(this.x+1, this.y);
+        let list = [upLeft, upRight, left, right, downLeft, downRight]
+        return list;
     }
 }

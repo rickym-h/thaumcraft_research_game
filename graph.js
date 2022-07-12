@@ -23,6 +23,9 @@ class Graph {
     }
 
     add_edge(start, end) {
+        if (this.edges[start] === undefined) {
+            this.edges[start] = [];
+        }
         this.edges[start].push(end);
         this.num_of_edges++;
     }
