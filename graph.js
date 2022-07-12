@@ -31,7 +31,7 @@ class Graph {
     }
 
     get_adjacent_nodes(node) {
-        return this.edges(node);
+        return this.edges[node];
     }
 
     printGraph()
@@ -50,6 +50,45 @@ class Graph {
         }
         console.log("Nodes: " + this.num_of_nodes);
         console.log("Edges: " + this.num_of_edges);
+    }
+
+    BFS (start, end) {
+        console.log("start: " + start.name + " end: " + end.name)
+        let queue = [];
+        queue.push([start]);
+        while (queue.length>0) {
+            let path = queue.shift();
+            console.log("path: " + path.map(x => x.name))
+            let node = path[path.length-1];
+            for (let adjacentNodeName of this.edges[node.name]) {
+                console.log("node: " + adjacentNodeName)
+                let adjacentNode = this.get_node_from_name(adjacentNodeName);
+                if (adjacentNode.name === end.name) {
+                    console.log("returning path")
+                    path.push(adjacentNode);
+                    return path;
+                }
+                if (!path.includes(adjacentNode)) {
+                    let newPath = path.map(x=>x);
+                    newPath.push(adjacentNode);
+                    queue.push(newPath);
+                    console.log("adding new path:" + newPath.map(x => x.name))
+                }
+            }
+        }
+        return "NOT FOUND"
+
+
+    }
+
+    getStartAndEnd() {
+        let out = []
+        for (let node of this.nodes) {
+            if (node.type !== "empty") {
+                out.push(node);
+            }
+        }
+        return out;
     }
 
 }

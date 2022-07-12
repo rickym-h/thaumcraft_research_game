@@ -66,6 +66,7 @@ let compound_aspects = {
     "stupidity": ["entropy", "mind"]
 };
 
+
 aspect_graph = new Graph();
 for (let aspect of base_aspects) {
     aspect_graph.add_node(aspect);
@@ -78,4 +79,13 @@ for (const [key, value] of Object.entries(compound_aspects)) {
         aspect_graph.add_edge(key, aspect);
         aspect_graph.add_edge(aspect, key);
     }
+}
+
+function isConnected(aspect1, aspect2) {
+    return !!aspect_graph.edges[aspect1].includes(aspect2);
+
+}
+
+function getRandomAspect() {
+    return aspect_graph.nodes[Math.floor(Math.random()*aspect_graph.nodes.length)];
 }

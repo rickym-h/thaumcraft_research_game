@@ -13,6 +13,7 @@ class hNode {
     get_svg_img() {
         let img = document.createElement("img");
         img.src = "aspect_images/" + getImageName(this.type);
+        return img;
     }
 
     set_type(aspect) {

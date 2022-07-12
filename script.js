@@ -6,6 +6,9 @@ for (let aspect of aspect_graph.nodes) {
     aspect_selector.appendChild(myImg);
 }
 
+let original_nodes;
+
+
 function createStartingBoard() {
     let myGraph = new Graph();
 
@@ -36,7 +39,38 @@ function createStartingBoard() {
         }
     }
 
-    console.log(myGraph.edges)
+    function shuffle(array) {
+        let currentIndex = array.length,  randomIndex;
+
+        // While there remain elements to shuffle.
+        while (currentIndex != 0) {
+
+            // Pick a remaining element.
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+
+            // And swap it with the current element.
+            [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex], array[currentIndex]];
+        }
+
+        return array;
+    }
+
+    //shuffle(myGraph.nodes);
+
+    //shuffle(aspect_graph.nodes)
+
+    //todo replace with random once done
+    //myGraph.nodes[0].set_type(getRandomAspect());
+    //myGraph.nodes[1].set_type(getRandomAspect());
+
+    // REMOVE
+    myGraph.get_node_from_name("x4y2").set_type("water");
+    myGraph.get_node_from_name("x4y4").set_type("water");
+    // REMOVE
+
+    original_nodes = myGraph.nodes;
 
 
     return myGraph;
@@ -45,6 +79,7 @@ function createStartingBoard() {
 
 function initBoard(graph) {
     let board = document.getElementById("board");
+    board.innerHTML = "";
     let matrix = [];
     for (let row = 0; row <= graph.rows; row++) {
         matrix.push([]);
@@ -56,7 +91,7 @@ function initBoard(graph) {
     for (let row of matrix) {
         let hexRow = document.createElement("div");
         hexRow.classList.toggle("hex-row");
-        for (let i of row) {
+        for (let currentNode of row) {
             let hex = document.createElement("div");
             hex.classList.toggle("hex");
             let t = document.createElement("div");
@@ -66,21 +101,25 @@ function initBoard(graph) {
             let b = document.createElement("div");
             b.classList.toggle("bottom");
 
-            m.textContent = i.name;
+            m.textContent = currentNode.name;
 
-            hex.appendChild(t);
-            hex.appendChild(m);
-            hex.appendChild(b);
-
+            // Add image if it is not empty
+            if (currentNode.type !== "empty") {
+                let img = currentNode.get_svg_img();
+                // todo make image bigger
+                m.appendChild(img);
+            }
 
             hex.addEventListener("click", function () {
-                console.log(i.name)
-                console.log(graph.edges)
-                let adjacent = graph.edges[i.name];
+                let adjacent = graph.edges[currentNode.name];
+
                 console.log(adjacent);
             })
 
 
+            hex.appendChild(t);
+            hex.appendChild(m);
+            hex.appendChild(b);
 
             hexRow.appendChild(hex);
         }
@@ -90,3 +129,27 @@ function initBoard(graph) {
 
 let graph = createStartingBoard();
 initBoard(graph);
+
+let new_board_button = document.getElementById("new-board");
+new_board_button.addEventListener("click", function() {
+    let graph = createStartingBoard();
+    initBoard(graph);
+})
+
+let reset_board_button = document.getElementById("reset-board");
+reset_board_button.addEventListener("click", function() {
+    graph.nodes = original_nodes;
+    initBoard(graph);
+})
+
+
+let solve_board_button = document.getElementById("solve-board");
+solve_board_button.addEventListener("click", function() {
+    // todo perform bfs on graph.
+    graph.nodes = original_nodes;
+    initBoard(graph);
+
+    let foo = graph.getStartAndEnd();
+    console.log(graph.BFS(foo[1], foo[0]))
+    console.log("done")
+})
