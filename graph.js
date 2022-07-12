@@ -1,11 +1,18 @@
-console.log("graph.js initialising...")
-
 class Graph {
     constructor() {
         this.nodes = [];
         this.edges = {};
         this.num_of_nodes = 0;
         this.num_of_edges = 0;
+    }
+
+    get_node_from_name(name) {
+        for (let node of this.nodes) {
+            if (node.name === name) {
+                return node;
+            }
+        }
+        return "NODE NOT FOUND";
     }
 
 

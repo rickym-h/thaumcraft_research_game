@@ -1,5 +1,3 @@
-console.log("aspect_translations.js initialising...")
-
 let aspect_translations = {
     "air": "aer",
     "earth": "terra",

@@ -1,5 +1,3 @@
-console.log("aspect_graph.js initialising...")
-
 let base_aspects = [
     "air",
     "earth",
@@ -81,6 +79,3 @@ for (const [key, value] of Object.entries(compound_aspects)) {
         aspect_graph.add_edge(aspect, key);
     }
 }
-
-
-console.log("Created aspect graph.");
