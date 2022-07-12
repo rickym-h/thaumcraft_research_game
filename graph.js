@@ -8,6 +8,7 @@ class Graph {
         this.num_of_edges = 0;
     }
 
+
     add_node(node) {
         this.nodes.push(node);
         this.edges[node] = [];
@@ -37,5 +38,8 @@ class Graph {
             }
             console.log(start + " -> " + target);
         }
+        console.log("Nodes: " + this.num_of_nodes);
+        console.log("Edges: " + this.num_of_edges);
     }
+
 }

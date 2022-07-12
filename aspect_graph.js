@@ -52,7 +52,20 @@ let compound_aspects = {
     "cloth": ["tool", "beast"],
     "mechanism": ["motion", "tool"],
     "trap": ["motion", "entropy"],
-    "exchange": ["motion", "water"]
+    "exchange": ["motion", "water"],
+    "wrath": ["weapon", "fire"],
+    "nether": ["fire", "magic"],
+    "gluttony": ["hunger", "void"],
+    "envy": ["senses", "hunger"],
+    "sloth": ["trap", "soul"],
+    "pride": ["flight", "void"],
+    "lust": ["flesh", "hunger"],
+    "time": ["void", "order"],
+    "electricity": ["energy", "mechanism"],
+    "magnetism": ["metal", "travel"],
+    "cheatiness": ["mine", "greed"],
+    "radioactivity": ["light", "energy"],
+    "stupidity": ["entropy", "mind"]
 };
 
 aspect_graph = new Graph();
@@ -68,5 +81,6 @@ for (const [key, value] of Object.entries(compound_aspects)) {
         aspect_graph.add_edge(aspect, key);
     }
 }
+
 
 console.log("Created aspect graph.");
