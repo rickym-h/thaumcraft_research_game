@@ -8,3 +8,5 @@ for (let aspect of aspect_graph.nodes) {
     myImg.src = filepath;
     aspect_selector.appendChild(myImg);
 }
+
+
