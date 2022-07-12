@@ -150,6 +150,6 @@ solve_board_button.addEventListener("click", function() {
     initBoard(graph);
 
     let foo = graph.getStartAndEnd();
-    console.log(graph.BFS(foo[1], foo[0]))
+    console.log(graph.BFS(foo[0], foo[1]))
     console.log("done")
 })

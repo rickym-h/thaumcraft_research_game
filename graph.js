@@ -53,29 +53,45 @@ class Graph {
     }
 
     BFS (start, end) {
+        let targetType = end.type;
         console.log("start: " + start.name + " end: " + end.name)
-        let queue = [];
-        queue.push([start]);
-        while (queue.length>0) {
-            let path = queue.shift();
-            console.log("path: " + path.map(x => x.name))
-            let node = path[path.length-1];
-            for (let adjacentNodeName of this.edges[node.name]) {
-                console.log("node: " + adjacentNodeName)
-                let adjacentNode = this.get_node_from_name(adjacentNodeName);
-                if (adjacentNode.name === end.name) {
-                    console.log("returning path")
-                    path.push(adjacentNode);
-                    return path;
-                }
-                if (!path.includes(adjacentNode)) {
-                    let newPath = path.map(x=>x);
-                    newPath.push(adjacentNode);
-                    queue.push(newPath);
-                    console.log("adding new path:" + newPath.map(x => x.name))
+        let queue = [[start]];
+
+        function nodeInPath(nodeName, pathSoFar) {
+            for (let node of pathSoFar) {
+                if (node.name === nodeName) {
+                    return true;
                 }
             }
+            return false;
         }
+
+        while (queue.length>0) {
+            let pathSoFar = queue.shift();
+            let currentNode = pathSoFar[pathSoFar.length-1];
+            let possibleAdjacentAspects = aspect_graph.edges[currentNode.type];
+            console.log(possibleAdjacentAspects)
+            // Get surrounding nodes
+            for (let adjacentNodeName of this.get_adjacent_nodes(currentNode.name)) {
+                console.log(adjacentNodeName)
+                let adjacentNode = this.get_node_from_name(adjacentNodeName)
+                if ((adjacentNode.type === "empty") && (!nodeInPath(adjacentNodeName, pathSoFar))) {
+                    // node is valid to add to path
+                    for (let aspect of possibleAdjacentAspects) {
+                        let newAdjacentNodeWithAspect = new hNode(adjacentNode.x, adjacentNode.y);
+                        newAdjacentNodeWithAspect.set_type(aspect);
+                        let newPathSoFar = pathSoFar.map((x)=>x);
+                        newPathSoFar.push(newAdjacentNodeWithAspect);
+                        queue.push(newPathSoFar)
+                    }
+                } else if ((end.name === adjacentNodeName) && (isConnected(currentNode.type, targetType))){
+                    pathSoFar.push(end);
+                    return pathSoFar;
+                }
+            }
+
+        }
+
         return "NOT FOUND"
 
 
