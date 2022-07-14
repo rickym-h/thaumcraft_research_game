@@ -90,17 +90,35 @@ function getRandomAspect() {
     return aspect_graph.nodes[Math.floor(Math.random()*aspect_graph.nodes.length)];
 }
 
-function getRandomConnectingAspect(startingAspect) {
+function getRandomConnectingAspect(startingAspect, aspectsToAvoidIfPossible) {
     let connectedAspects = aspect_graph.edges[startingAspect];
-    return connectedAspects[Math.floor(Math.random()*connectedAspects.length)]
+
+    console.log(startingAspect + " => " + connectedAspects)
+    console.log("aspect to avoid = " + aspectsToAvoidIfPossible)
+    // tODO FOR SOME reASON NOT WOrKINg BEYOND HERE
+    let filteredAspects = connectedAspects.filter((x)=>(!aspectsToAvoidIfPossible.includes(x)))
+
+    if (filteredAspects.length === 0) {
+        return connectedAspects[Math.floor(Math.random()*connectedAspects.length)]
+    } else {
+        return filteredAspects[Math.floor(Math.random()*connectedAspects.length)]
+    }
+
 }
 
 function getConnectedAspectChainStartingFromWithLength(startingAspect, chainLength) {
     let myChain = [startingAspect];
     // todo try filtering out nodes already appeared, and if any exist try to use from new filtered list
     while (myChain.length < chainLength) {
-        let newAspect = getRandomConnectingAspect(myChain[myChain.length-1]);
-        myChain.push(newAspect);
+        let possibleNewAspects = aspect_graph.edges[myChain[myChain.length-1]];
+
+        console.log(possibleNewAspects)
+        let filteredPossibleNewAspects = possibleNewAspects.filter((a)=>(!myChain.includes(a)));
+        if (filteredPossibleNewAspects.length === 0) {
+            myChain.push(possibleNewAspects[Math.floor(Math.random()*possibleNewAspects.length)]);
+        } else {
+            myChain.push(filteredPossibleNewAspects[Math.floor(Math.random()*filteredPossibleNewAspects.length)]);
+        }
     }
 
     return myChain;

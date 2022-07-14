@@ -51,12 +51,12 @@ function createStartingBoard() {
     let chainLength = 8;
 
 
-    console.log(aspectChain);
 
     let nodeChain = myGraph.getChainOfNodesStartingFrom(myGraph.nodes[0], chainLength);
     console.log(nodeChain)
     let startingAspect = getRandomAspect();
     let aspectChain = getConnectedAspectChainStartingFromWithLength(startingAspect, nodeChain.length);
+    console.log(aspectChain);
 
     for (let i = 0; i<nodeChain.length; i++) {
         nodeChain[i].type = aspectChain[i]
