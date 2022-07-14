@@ -39,29 +39,28 @@ function createStartingBoard() {
         }
     }
 
-    function shuffle(array) {
-        let currentIndex = array.length,  randomIndex;
+    console.log("test")
 
-        // While there remain elements to shuffle.
-        while (currentIndex != 0) {
 
-            // Pick a remaining element.
-            randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex--;
+    // generate a solution, and then a starting board based on the solution
 
-            // And swap it with the current element.
-            [array[currentIndex], array[randomIndex]] = [
-                array[randomIndex], array[currentIndex]];
-        }
+    let complete = false;
 
-        return array;
+    shuffle(myGraph.nodes)
+
+    let chainLength = 8;
+
+
+    console.log(aspectChain);
+
+    let nodeChain = myGraph.getChainOfNodesStartingFrom(myGraph.nodes[0], chainLength);
+    console.log(nodeChain)
+    let startingAspect = getRandomAspect();
+    let aspectChain = getConnectedAspectChainStartingFromWithLength(startingAspect, nodeChain.length);
+
+    for (let i = 0; i<nodeChain.length; i++) {
+        nodeChain[i].type = aspectChain[i]
     }
-
-
-    shuffle(myGraph.nodes);
-    shuffle(aspect_graph.nodes);
-    myGraph.nodes[0].set_type(getRandomAspect());
-    myGraph.nodes[1].set_type(getRandomAspect());
 
     original_nodes = myGraph.nodes;
 
@@ -142,15 +141,7 @@ reset_board_button.addEventListener("click", function() {
 let solve_board_button = document.getElementById("solve-board");
 solve_board_button.addEventListener("click", function() {
     graph.nodes = original_nodes;
-
-
-    solution = graph.BFS(graph.nodes[0], graph.nodes[1]);
-    console.log(solution);
-
-    for (let node of solution) {
-        console.log(node);
-        graph.get_node_from_name(node.name).set_type(node.type);
-    }
-    graph.complete = true;
-    initBoard(graph);
+    // todo get the solved board and display
 })
+
+console.log("finished everything")

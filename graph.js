@@ -1,3 +1,21 @@
+function shuffle(array) {
+    let currentIndex = array.length,  randomIndex;
+
+    // While there remain elements to shuffle.
+    while (currentIndex != 0) {
+
+        // Pick a remaining element.
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        // And swap it with the current element.
+        [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex], array[currentIndex]];
+    }
+
+    return array;
+}
+
 class Graph {
     constructor() {
         this.nodes = [];
@@ -79,54 +97,43 @@ class Graph {
         console.log("Edges: " + this.num_of_edges);
     }
 
-    BFS (start, end) {
-        let targetType = end.type;
-        let queue = [[start]];
-
-        function nodeInPath(nodeName, pathSoFar) {
-            for (let node of pathSoFar) {
-                if (node.name === nodeName) {
-                    return true;
+    getChainOfNodesStartingFrom(startingNode, chainLength = 6) {
+        // do a breadth first search where it takes a random directions each time
+        // return first chain of length >=chain length
+        // if no path found, then no path is possible
+        let visited = [startingNode];
+        let longestSoFar = [startingNode];
+        let myQueueOfPaths = [[startingNode]];
+        while (myQueueOfPaths.length > 0) {
+            // pop last path
+            let lastPath = myQueueOfPaths.shift();
+            console.log("processing path:" + lastPath.length)
+            // check length and return if valid
+            if (lastPath.length >= chainLength) {
+                return lastPath;
+            } else {
+                if (lastPath.length>longestSoFar.length) {
+                    longestSoFar = lastPath.map(((x)=>x))
                 }
             }
-            return false;
-        }
-
-        while (queue.length>0) {
-            let pathSoFar = queue.shift();
-            console.log("Checking Path: " + pathSoFar.map((x)=>x.name))
-            let currentNode = pathSoFar[pathSoFar.length-1];
-            let possibleAdjacentAspects = aspect_graph.edges[currentNode.type];
-            // Get surrounding nodes
-            for (let adjacentNodeName of this.get_adjacent_nodes(currentNode.name)) {
-                let adjacentNode = this.get_node_from_name(adjacentNodeName)
-                if ((adjacentNode.type === "empty") && (!nodeInPath(adjacentNodeName, pathSoFar))) {
-                    // node is valid to add to path
-                    for (let aspect of possibleAdjacentAspects) {
-                        let newAdjacentNodeWithAspect = new hNode(adjacentNode.x, adjacentNode.y);
-                        newAdjacentNodeWithAspect.set_type(aspect);
-                        let newPathSoFar = pathSoFar.map((x)=>x);
-                        newPathSoFar.push(newAdjacentNodeWithAspect);
-                        queue.push(newPathSoFar)
-                    }
-                } else if ((end.name === adjacentNodeName) && (isConnected(currentNode.type, targetType))){
-                    pathSoFar.push(end);
-                    return pathSoFar;
-                }
-            }
-
-        }
-        return "NOT FOUND"
-    }
-
-    getStartAndEnd() {
-        let out = []
-        for (let node of this.nodes) {
-            if (node.type !== "empty") {
-                out.push(node);
+            // otherwise, process
+            // add adjacent nodes which are not in the path, and are empty
+            let connectedNodes = this.get_adjacent_nodes(lastPath[lastPath.length-1].name)
+            connectedNodes = connectedNodes.map((x)=>this.get_node_from_name(x))
+            connectedNodes = connectedNodes.filter((n)=>((!lastPath.includes(n)) && (n.type === "empty") && (!visited.includes(n))));
+            // IN RANDOM ORDER
+            shuffle(connectedNodes);
+            for (let adjacentNode of connectedNodes) {
+                // create new path
+                let newPath = lastPath.map((x)=>x);
+                newPath.push(adjacentNode);
+                myQueueOfPaths.push(newPath);
+                visited.push(adjacentNode);
             }
         }
-        return out;
+        return longestSoFar
     }
 
 }
+
+console.log("finished parsing graph.js")

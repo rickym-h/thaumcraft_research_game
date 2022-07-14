@@ -89,3 +89,20 @@ function isConnected(aspect1, aspect2) {
 function getRandomAspect() {
     return aspect_graph.nodes[Math.floor(Math.random()*aspect_graph.nodes.length)];
 }
+
+function getRandomConnectingAspect(startingAspect) {
+    let connectedAspects = aspect_graph.edges[startingAspect];
+    return connectedAspects[Math.floor(Math.random()*connectedAspects.length)]
+}
+
+function getConnectedAspectChainStartingFromWithLength(startingAspect, chainLength) {
+    let myChain = [startingAspect];
+    // todo try filtering out nodes already appeared, and if any exist try to use from new filtered list
+    while (myChain.length < chainLength) {
+        let newAspect = getRandomConnectingAspect(myChain[myChain.length-1]);
+        myChain.push(newAspect);
+    }
+
+    return myChain;
+
+}
