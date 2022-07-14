@@ -57,19 +57,11 @@ function createStartingBoard() {
         return array;
     }
 
+
     shuffle(myGraph.nodes);
-
-    shuffle(aspect_graph.nodes)
-
+    shuffle(aspect_graph.nodes);
     myGraph.nodes[0].set_type(getRandomAspect());
     myGraph.nodes[1].set_type(getRandomAspect());
-
-    // REMOVE
-    //myGraph.get_node_from_name("x4y2").set_type("water");
-    //myGraph.get_node_from_name("x4y4").set_type("water");
-    // REMOVE
-
-    console.log(myGraph.BFS(myGraph.nodes[0], myGraph.nodes[1]))
 
     original_nodes = myGraph.nodes;
 
@@ -112,9 +104,11 @@ function initBoard(graph) {
             }
 
             hex.addEventListener("click", function () {
-                let adjacent = graph.edges[currentNode.name];
-
-                console.log(adjacent);
+                if (!graph.complete) {
+                    graph.get_node_from_name(currentNode.name).set_type("water")
+                    initBoard(graph);
+                    graph.isComplete();
+                }
             })
 
 
@@ -140,17 +134,23 @@ new_board_button.addEventListener("click", function() {
 let reset_board_button = document.getElementById("reset-board");
 reset_board_button.addEventListener("click", function() {
     graph.nodes = original_nodes;
+    graph.complete = false;
     initBoard(graph);
 })
 
 
 let solve_board_button = document.getElementById("solve-board");
 solve_board_button.addEventListener("click", function() {
-    // todo perform bfs on graph.
     graph.nodes = original_nodes;
-    initBoard(graph);
 
-    let foo = graph.getStartAndEnd();
-    console.log(graph.BFS(foo[0], foo[1]))
-    console.log("done")
+
+    solution = graph.BFS(graph.nodes[0], graph.nodes[1]);
+    console.log(solution);
+
+    for (let node of solution) {
+        console.log(node);
+        graph.get_node_from_name(node.name).set_type(node.type);
+    }
+    graph.complete = true;
+    initBoard(graph);
 })
