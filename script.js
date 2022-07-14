@@ -1,15 +1,20 @@
 let aspect_selector = document.getElementById("aspect_selector");
+let count = 0;
 for (let aspect of aspect_graph.nodes) {
     let filepath = "aspect_images/" + getImageName(aspect);
     let myImg = document.createElement("img");
     myImg.src = filepath;
+    myImg.id = aspect
     aspect_selector.appendChild(myImg);
+    count++
 }
+console.log(count)
 
-let original_nodes;
+let original;
+let solution;
 
 
-function createStartingBoard() {
+function createStartingBoard(numOfExtraNodesToConnect=1) {
     let myGraph = new Graph();
 
 
@@ -39,30 +44,66 @@ function createStartingBoard() {
         }
     }
 
-    console.log("test")
 
 
     // generate a solution, and then a starting board based on the solution
 
-    let complete = false;
 
     shuffle(myGraph.nodes)
 
-    let chainLength = 8;
+    let emptyGraphNodes = myGraph.nodes.map((x)=>x);
+
+    let startingNodeList = [];
+
+    let chainLength = Math.floor(Math.random() * 3) + 5;
 
 
 
     let nodeChain = myGraph.getChainOfNodesStartingFrom(myGraph.nodes[0], chainLength);
-    console.log(nodeChain)
     let startingAspect = getRandomAspect();
     let aspectChain = getConnectedAspectChainStartingFromWithLength(startingAspect, nodeChain.length);
-    console.log(aspectChain);
+
 
     for (let i = 0; i<nodeChain.length; i++) {
         nodeChain[i].type = aspectChain[i]
     }
 
-    original_nodes = myGraph.nodes;
+    startingNodeList.push(nodeChain[0]);
+    startingNodeList.push(nodeChain[nodeChain.length-1]);
+
+    for (let i = 0; i < numOfExtraNodesToConnect; i++) {
+        // find an extra starting node
+        let possibleStarts = myGraph.nodes.filter((x)=>(x.type !== "empty"));
+        shuffle(possibleStarts);
+        let startingNode = possibleStarts[0];
+        let newNodeChain = myGraph.getChainOfNodesStartingFrom(startingNode, chainLength);
+        let newStartingAspect = startingNode.type;
+        let newAspectChain = getConnectedAspectChainStartingFromWithLength(newStartingAspect, newNodeChain.length)
+        for (let j = 0; j<newNodeChain.length; j++) {
+            newNodeChain[j].type = newAspectChain[j]
+        }
+        startingNodeList.push(newNodeChain[newNodeChain.length-1])
+    }
+
+
+    solution = {}
+    for (let node of myGraph.nodes) {
+        solution[node.name] = node.type
+    }
+    //console.log(solution)
+
+
+    for (let node of myGraph.nodes) {
+        if (!startingNodeList.includes(node)) {
+            node.type = "empty";
+        }
+    }
+
+    original = {}
+    for (let node of myGraph.nodes) {
+        original[node.name] = node.type
+    }
+    //console.log(original)
 
 
     return myGraph;
@@ -103,11 +144,12 @@ function initBoard(graph) {
             }
 
             hex.addEventListener("click", function () {
-                if (!graph.complete) {
-                    graph.get_node_from_name(currentNode.name).set_type("water")
+                if ((!graph.complete) && (currentNode.type === "empty")) {
+                    currentNode.set_type("water")
                     initBoard(graph);
-                    graph.isComplete();
                 }
+
+                // check if the board is complete and update graph.complete
             })
 
 
@@ -132,7 +174,7 @@ new_board_button.addEventListener("click", function() {
 
 let reset_board_button = document.getElementById("reset-board");
 reset_board_button.addEventListener("click", function() {
-    graph.nodes = original_nodes;
+    graph.set_nodes_to_dict(original)
     graph.complete = false;
     initBoard(graph);
 })
@@ -140,8 +182,9 @@ reset_board_button.addEventListener("click", function() {
 
 let solve_board_button = document.getElementById("solve-board");
 solve_board_button.addEventListener("click", function() {
-    graph.nodes = original_nodes;
-    // todo get the solved board and display
-})
+    console.log("showing solution")
 
-console.log("finished everything")
+    graph.set_nodes_to_dict(solution)
+    graph.complete = true;
+    initBoard(graph)
+})

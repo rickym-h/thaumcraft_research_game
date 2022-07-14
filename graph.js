@@ -25,31 +25,6 @@ class Graph {
         this.complete = false;
     }
 
-    isComplete() {
-        console.log("checking completentss...........")
-        let start = this.nodes[0];
-        let end = this.nodes[1];
-        let queue = [[start]];
-        while (queue.length>0) {
-            let path = queue.shift();
-            let currentNode = path[path.length-1];
-            for (let adjacentNodeName of this.get_adjacent_nodes(currentNode.name)) {
-                let adjacentNode = this.get_node_from_name(adjacentNodeName)
-                if (adjacentNode.type !== "empty") {
-                    let newPath = path.map(x=>x);
-                    newPath.push(adjacentNode);
-                    queue.push(newPath);
-                }
-                if (adjacentNode === end) {
-                    this.complete = true;
-                    console.log("COMPLETED")
-                    return true;
-                }
-            }
-        }
-        console.log("not completed...")
-        return false;
-    }
 
     get_node_from_name(name) {
         for (let node of this.nodes) {
@@ -77,6 +52,12 @@ class Graph {
 
     get_adjacent_nodes(node) {
         return this.edges[node];
+    }
+
+    set_nodes_to_dict(input) {
+        for (let node of this.nodes) {
+            node.type = input[node.name];
+        }
     }
 
     printGraph()
@@ -107,7 +88,6 @@ class Graph {
         while (myQueueOfPaths.length > 0) {
             // pop last path
             let lastPath = myQueueOfPaths.shift();
-            console.log("processing path:" + lastPath.length)
             // check length and return if valid
             if (lastPath.length >= chainLength) {
                 return lastPath;
@@ -135,5 +115,3 @@ class Graph {
     }
 
 }
-
-console.log("finished parsing graph.js")

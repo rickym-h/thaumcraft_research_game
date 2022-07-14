@@ -112,7 +112,6 @@ function getConnectedAspectChainStartingFromWithLength(startingAspect, chainLeng
     while (myChain.length < chainLength) {
         let possibleNewAspects = aspect_graph.edges[myChain[myChain.length-1]];
 
-        console.log(possibleNewAspects)
         let filteredPossibleNewAspects = possibleNewAspects.filter((a)=>(!myChain.includes(a)));
         if (filteredPossibleNewAspects.length === 0) {
             myChain.push(possibleNewAspects[Math.floor(Math.random()*possibleNewAspects.length)]);
