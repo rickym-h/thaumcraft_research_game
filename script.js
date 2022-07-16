@@ -89,7 +89,7 @@ for (let aspect of aspect_graph.nodes) {
     //
     myDiv.addEventListener('dragstart', dragStart);
     function dragStart() {
-        currentDraggedAspect = myImg.id;
+        currentDraggedAspect = myDiv.id;
     }
 
     myDiv.addEventListener("mouseenter", function() {
