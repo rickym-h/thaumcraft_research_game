@@ -28,6 +28,13 @@
     align-items: center;
 }
 
+#new-game-panel {
+    display: flex;
+    flex-direction: column;
+    border: solid 2px black;
+    padding: 5px;
+}
+
 .aspect_info {
     border: solid 3px orange;
     display: flex;

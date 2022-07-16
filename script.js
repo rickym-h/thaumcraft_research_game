@@ -240,7 +240,7 @@ function initBoard(graph) {
                     targetNode.appendChild(myImg);
                     // check if graph is complete
                     graph.checkCompleteness(original);
-                    console.log(this.complete)
+                    console.log(graph.complete)
                 }
             }
 
@@ -274,9 +274,11 @@ function initBoard(graph) {
 let graph = createStartingBoard();
 initBoard(graph);
 
-let new_board_button = document.getElementById("new-board");
+let new_board_button = document.getElementById("new-board-button");
 new_board_button.addEventListener("click", function() {
-    let graph = createStartingBoard();
+    let num = document.getElementById("select-starting-num");
+
+    let graph = createStartingBoard(num.value-2);
     initBoard(graph);
 })
 
