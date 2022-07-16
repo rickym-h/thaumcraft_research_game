@@ -1,5 +1,8 @@
 let currentDraggedAspect = null;
 
+
+
+
 function getDivInfoOfAspect(aspect) {
     let myDiv = document.createElement("div");
     let filepath = "aspect_images/" + getImageName(aspect);
@@ -23,7 +26,6 @@ function getDivInfoOfAspect(aspect) {
 
 let info_panel = document.getElementById("info-panel");
 function updateInfoPanel(aspect) {
-    console.log(aspect)
     let type;
     switch (aspect) {
         case "air":
@@ -78,10 +80,8 @@ for (let aspect of aspect_graph.nodes) {
     myImg.id = aspect
 
     myImg.addEventListener('dragstart', dragStart);
-    function dragStart(e) {
-        console.log("PICKED UP")
+    function dragStart() {
         currentDraggedAspect = myImg.id;
-        console.log(currentDraggedAspect);
     }
 
     myImg.addEventListener("mouseenter", function() {
@@ -134,18 +134,12 @@ function createStartingBoard(numOfExtraNodesToConnect=0) {
 
     shuffle(myGraph.nodes)
 
-    let emptyGraphNodes = myGraph.nodes.map((x)=>x);
-
     let startingNodeList = [];
-
     let chainLength = Math.floor(Math.random() * 3) + 5;
-
-
 
     let nodeChain = myGraph.getChainOfNodesStartingFrom(myGraph.nodes[0], chainLength);
     let startingAspect = getRandomAspect();
     let aspectChain = getConnectedAspectChainStartingFromWithLength(startingAspect, nodeChain.length);
-
 
     for (let i = 0; i<nodeChain.length; i++) {
         nodeChain[i].type = aspectChain[i]
@@ -229,7 +223,6 @@ function initBoard(graph) {
                 let currentNode = graph.get_node_from_name(parentNode.id)
 
                 if (parentNode.classList.contains("hex") && (!graph.complete) && (currentNode.type === "empty") && (graph.canPlaceNode(currentNode, currentDraggedAspect))) {
-                    console.log("VALID")
                     // update graph
                     currentNode.type = currentDraggedAspect;
 
@@ -239,10 +232,15 @@ function initBoard(graph) {
 
                     myImg.src = filepath;
                     myImg.id = currentDraggedAspect
+                    let aspect = currentDraggedAspect;
+                    myImg.addEventListener("mouseenter", function() {
+                        updateInfoPanel(aspect);
+                    });
 
                     targetNode.appendChild(myImg);
                     // check if graph is complete
-                    console.log(graph)
+                    graph.checkCompleteness(original);
+                    console.log(this.complete)
                 }
             }
 
@@ -250,12 +248,14 @@ function initBoard(graph) {
             let b = document.createElement("div");
             b.classList.toggle("bottom");
 
-            //m.textContent = currentNode.name;
+            m.textContent = currentNode.name;
 
             // Add image if it is not empty
             if (currentNode.type !== "empty") {
                 let img = currentNode.get_svg_img();
-                // todo make image bigger
+                img.addEventListener("mouseenter", function() {
+                    updateInfoPanel(currentNode.type);
+                });
                 m.appendChild(img);
             }
 
@@ -290,7 +290,6 @@ reset_board_button.addEventListener("click", function() {
 
 let solve_board_button = document.getElementById("solve-board");
 solve_board_button.addEventListener("click", function() {
-    console.log("showing solution")
 
     graph.set_nodes_to_dict(solution)
     graph.complete = true;

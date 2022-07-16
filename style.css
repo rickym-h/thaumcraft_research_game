@@ -42,6 +42,7 @@
 
 .aspect_image {
     border: solid 3px purple;
+    padding: 4px;
 }
 
 .hex-row {

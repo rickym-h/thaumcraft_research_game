@@ -25,6 +25,38 @@ class Graph {
         this.complete = false;
     }
 
+    checkCompleteness(original) {
+        let myStartingNodes = [];
+        for (let key of Object.keys(original)) {
+            if (original[key] !== "empty") {
+                myStartingNodes.push(key)
+            }
+        }
+        console.log(myStartingNodes)
+
+        // take the first starting node, and do a bfs, returning true if all the nodes are visited
+        let visited = [];
+        let myQueue = [myStartingNodes[0]]
+        while (myQueue.length > 0) {
+            let currentNode = myQueue.shift();
+            let adjacentNodes = this.get_adjacent_nodes(currentNode).filter((n)=>this.get_node_from_name(n).type !== "empty")
+
+            adjacentNodes = adjacentNodes.filter((n)=>{return !visited.includes(n)})
+            for (let adjacentNode of adjacentNodes) {
+                myQueue.push(adjacentNode)
+                visited.push(adjacentNode)
+            }
+        }
+
+        for (let startingNode of myStartingNodes) {
+            if (!visited.includes(startingNode)) {
+                this.complete = false;
+                return;
+            }
+        }
+        this.complete = true;
+    }
+
 
     get_node_from_name(name) {
         for (let node of this.nodes) {
@@ -115,17 +147,13 @@ class Graph {
 
     canPlaceNode(node, aspect) {
         let adjacentNodes = this.get_adjacent_nodes(node.name);
-        console.log(adjacentNodes)
         let possibleAdjacentAspects = aspect_graph.edges[aspect];
-        console.log(possibleAdjacentAspects)
         for (let neighbourNode of adjacentNodes) {
             let nodeToCheck = this.get_node_from_name(neighbourNode);
             if (possibleAdjacentAspects.includes(nodeToCheck.type)) {
-                console.log("returning true")
                 return true;
             }
         }
-        console.log("returning false")
         return false;
     }
 
