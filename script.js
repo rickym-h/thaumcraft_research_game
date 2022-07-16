@@ -248,7 +248,13 @@ function initBoard(graph) {
                     targetNode.appendChild(myImg);
                     // check if graph is complete
                     graph.checkCompleteness(original);
-                    console.log(graph.complete)
+
+                    let info = document.getElementById("game-info");
+                    if (graph.complete) {
+                        info.textContent = "You win! Congratulations!";
+                    } else {
+                        info.textContent = "";
+                    }
                 }
             }
 
