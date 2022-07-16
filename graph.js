@@ -32,7 +32,6 @@ class Graph {
                 myStartingNodes.push(key)
             }
         }
-        console.log(myStartingNodes)
 
         // take the first starting node, and do a bfs, returning true if all the nodes are visited
         let visited = [];
