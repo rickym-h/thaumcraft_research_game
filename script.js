@@ -1,5 +1,74 @@
 let currentDraggedAspect = null;
 
+function getDivInfoOfAspect(aspect) {
+    let myDiv = document.createElement("div");
+    let filepath = "aspect_images/" + getImageName(aspect);
+    let myImg = document.createElement("img");
+    myImg.src = filepath;
+    myImg.id = aspect
+    myDiv.appendChild(myImg);
+
+    let head = document.createElement("h4");
+    head.textContent = aspect_translations[aspect];
+    myDiv.appendChild(head);
+
+    let body = document.createElement("p");
+    body.textContent = aspect;
+    myDiv.appendChild(body);
+    myDiv.classList.toggle("aspect_info")
+
+    return myDiv;
+}
+
+
+let info_panel = document.getElementById("info-panel");
+function updateInfoPanel(aspect) {
+    console.log(aspect)
+    let type;
+    switch (aspect) {
+        case "air":
+        case "earth":
+        case "fire":
+        case "water":
+        case "order":
+        case "entropy":
+            type = "base";
+            break;
+        default:
+            type = "compound";
+    }
+    info_panel.innerHTML = "";
+    let focusAspect = getDivInfoOfAspect(aspect)
+
+    info_panel.appendChild(focusAspect);
+    if (type === "base") {
+        let text = document.createElement("p");
+        text.textContent = "BASE ELEMENT";
+        info_panel.appendChild(text);
+    } else if (type === "compound") {
+        let text = document.createElement("p");
+        text.textContent = "COMPOUND ELEMENT";
+        info_panel.appendChild(text);
+
+        let parentAspects = compound_aspects[aspect];
+
+        let compound_display = document.createElement("div");
+        compound_display.classList.toggle("compound-display");
+
+        let left = getDivInfoOfAspect(parentAspects[0])
+        let plus = document.createElement("h1");
+        plus.textContent = "+";
+        let right = getDivInfoOfAspect(parentAspects[1])
+
+        compound_display.appendChild(left)
+        compound_display.appendChild(plus)
+        compound_display.appendChild(right)
+
+        info_panel.appendChild(compound_display)
+
+    }
+}
+
 let aspect_selector = document.getElementById("aspect_selector");
 for (let aspect of aspect_graph.nodes) {
 
@@ -15,6 +84,10 @@ for (let aspect of aspect_graph.nodes) {
         console.log(currentDraggedAspect);
     }
 
+    myImg.addEventListener("mouseenter", function() {
+        updateInfoPanel(aspect);
+    });
+
     myImg.classList.toggle("aspect_image")
 
     aspect_selector.appendChild(myImg);
@@ -24,7 +97,7 @@ let original;
 let solution;
 
 
-function createStartingBoard(numOfExtraNodesToConnect=1) {
+function createStartingBoard(numOfExtraNodesToConnect=0) {
     let myGraph = new Graph();
 
 
@@ -177,7 +250,7 @@ function initBoard(graph) {
             let b = document.createElement("div");
             b.classList.toggle("bottom");
 
-            m.textContent = currentNode.name;
+            //m.textContent = currentNode.name;
 
             // Add image if it is not empty
             if (currentNode.type !== "empty") {
@@ -185,15 +258,6 @@ function initBoard(graph) {
                 // todo make image bigger
                 m.appendChild(img);
             }
-
-            hex.addEventListener("click", function () {
-                if ((!graph.complete) && (currentNode.type === "empty")) {
-                    currentNode.set_type("water")
-                    initBoard(graph);
-                }
-
-                // todo check if the board is complete and update graph.complete
-            })
 
 
 
@@ -236,3 +300,4 @@ solve_board_button.addEventListener("click", function() {
 document.addEventListener("drop", function() {
     currentDraggedAspect = null;
 })
+

@@ -15,8 +15,33 @@
     align-items: center;
 }
 
+#button-pane {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+#info-panel {
+    border: solid 3px purple;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.aspect_info {
+    border: solid 3px orange;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.compound-display {
+    display: flex;
+    justify-content: center;
+}
+
 .aspect_image {
-    border: dashed 3px red;
+    border: solid 3px purple;
 }
 
 .hex-row {
@@ -40,6 +65,8 @@
     width: 104px;
     height: 60px;
     background: #6C6;
+    display: flex;
+    justify-content: center;
 }
 .hex .bottom {
     width: 0;
