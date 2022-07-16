@@ -63,7 +63,7 @@ let compound_aspects = {
     "magnetism": ["metal", "travel"],
     "cheatiness": ["mine", "greed"],
     "radioactivity": ["light", "energy"],
-    "stupidity": ["entropy", "mind"]
+    "stupidity": ["entropy", "mind"],
 };
 
 
@@ -82,7 +82,7 @@ for (const [key, value] of Object.entries(compound_aspects)) {
 }
 
 function isConnected(aspect1, aspect2) {
-    return !!aspect_graph.edges[aspect1].includes(aspect2);
+    return aspect_graph.edges[aspect1].includes(aspect2);
 
 }
 
@@ -90,21 +90,6 @@ function getRandomAspect() {
     return aspect_graph.nodes[Math.floor(Math.random()*aspect_graph.nodes.length)];
 }
 
-function getRandomConnectingAspect(startingAspect, aspectsToAvoidIfPossible) {
-    let connectedAspects = aspect_graph.edges[startingAspect];
-
-    console.log(startingAspect + " => " + connectedAspects)
-    console.log("aspect to avoid = " + aspectsToAvoidIfPossible)
-    // tODO FOR SOME reASON NOT WOrKINg BEYOND HERE
-    let filteredAspects = connectedAspects.filter((x)=>(!aspectsToAvoidIfPossible.includes(x)))
-
-    if (filteredAspects.length === 0) {
-        return connectedAspects[Math.floor(Math.random()*connectedAspects.length)]
-    } else {
-        return filteredAspects[Math.floor(Math.random()*connectedAspects.length)]
-    }
-
-}
 
 function getConnectedAspectChainStartingFromWithLength(startingAspect, chainLength) {
     let myChain = [startingAspect];

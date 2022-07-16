@@ -196,6 +196,7 @@ function createStartingBoard(numOfExtraNodesToConnect=0) {
 }
 
 function initBoard(graph) {
+
     let board = document.getElementById("board");
     board.innerHTML = "";
     let matrix = [];
@@ -301,6 +302,8 @@ new_board_button.addEventListener("click", function() {
 
     let graph = createStartingBoard(num.value-2);
     initBoard(graph);
+    let info = document.getElementById("game-info");
+    info.textContent = "";
 })
 
 let reset_board_button = document.getElementById("reset-board");
@@ -308,6 +311,8 @@ reset_board_button.addEventListener("click", function() {
     graph.set_nodes_to_dict(original)
     graph.complete = false;
     initBoard(graph);
+    let info = document.getElementById("game-info");
+    info.textContent = "";
 })
 
 
@@ -317,6 +322,8 @@ solve_board_button.addEventListener("click", function() {
     graph.set_nodes_to_dict(solution)
     graph.complete = true;
     initBoard(graph)
+    let info = document.getElementById("game-info");
+    info.textContent = "";
 })
 
 document.addEventListener("drop", function() {

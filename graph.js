@@ -39,7 +39,16 @@ class Graph {
         let myQueue = [myStartingNodes[0]]
         while (myQueue.length > 0) {
             let currentNode = myQueue.shift();
-            let adjacentNodes = this.get_adjacent_nodes(currentNode).filter((n)=>this.get_node_from_name(n).type !== "empty")
+            let adjacentNodes = this.get_adjacent_nodes(currentNode);
+            console.log(adjacentNodes)
+            adjacentNodes = adjacentNodes.filter((n)=> {
+                console.log("adjacentNode: " + n)
+                console.log("currentNode: " + currentNode)
+                if (this.get_node_from_name(n).type === "empty") {
+                    return false;
+                }
+                return isConnected(this.get_node_from_name(n).type, this.get_node_from_name(currentNode).type);
+            })
 
             adjacentNodes = adjacentNodes.filter((n)=>{return !visited.includes(n)})
             for (let adjacentNode of adjacentNodes) {
@@ -51,10 +60,12 @@ class Graph {
         for (let startingNode of myStartingNodes) {
             if (!visited.includes(startingNode)) {
                 this.complete = false;
+                console.log("false")
                 return;
             }
         }
         this.complete = true;
+        console.log("true")
     }
 
 
