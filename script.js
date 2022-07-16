@@ -12,11 +12,16 @@ function getDivInfoOfAspect(aspect) {
     myDiv.appendChild(myImg);
 
     let head = document.createElement("p");
-    head.textContent = aspect_translations[aspect];
+    let str = aspect_translations[aspect];
+    head.textContent = str.charAt(0).toUpperCase() + str.slice(1);
+    head.classList.toggle("aspect-names")
+    head.innerHTML = "<b>" + head.innerHTML + "</b>"
     myDiv.appendChild(head);
 
     let body = document.createElement("p");
-    body.textContent = aspect;
+    str = aspect;
+    body.textContent = str.charAt(0).toUpperCase() + str.slice(1);
+    body.classList.toggle("aspect-names")
     myDiv.appendChild(body);
     myDiv.classList.toggle("aspect_info")
 
@@ -74,23 +79,26 @@ function updateInfoPanel(aspect) {
 let aspect_selector = document.getElementById("aspect_selector");
 for (let aspect of aspect_graph.nodes) {
 
-    let filepath = "aspect_images/" + getImageName(aspect);
-    let myImg = document.createElement("img");
-    myImg.src = filepath;
-    myImg.id = aspect
+    let myDiv = getDivInfoOfAspect(aspect)
+    myDiv.id = aspect;
 
-    myImg.addEventListener('dragstart', dragStart);
+    // let filepath = "aspect_images/" + getImageName(aspect);
+    // let myImg = document.createElement("img");
+    // myImg.src = filepath;
+    // myImg.id = aspect
+    //
+    myDiv.addEventListener('dragstart', dragStart);
     function dragStart() {
         currentDraggedAspect = myImg.id;
     }
 
-    myImg.addEventListener("mouseenter", function() {
+    myDiv.addEventListener("mouseenter", function() {
         updateInfoPanel(aspect);
     });
+    //
+    // myImg.classList.toggle("aspect_image")
 
-    myImg.classList.toggle("aspect_image")
-
-    aspect_selector.appendChild(myImg);
+    aspect_selector.appendChild(myDiv);
 }
 
 let original;
@@ -248,7 +256,7 @@ function initBoard(graph) {
             let b = document.createElement("div");
             b.classList.toggle("bottom");
 
-            m.textContent = currentNode.name;
+            //m.textContent = currentNode.name;
 
             // Add image if it is not empty
             if (currentNode.type !== "empty") {

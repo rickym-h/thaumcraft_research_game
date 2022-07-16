@@ -1,5 +1,6 @@
 #selector_board_container {
     display: flex;
+    justify-content: space-around;
 }
 
 #aspect_selector {
@@ -33,6 +34,10 @@
     flex-direction: column;
     border: solid 2px black;
     padding: 5px;
+}
+
+.aspect-names {
+    margin: 4px;
 }
 
 
