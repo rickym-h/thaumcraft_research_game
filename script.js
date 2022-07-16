@@ -175,7 +175,6 @@ function createStartingBoard(numOfExtraNodesToConnect=0) {
     for (let node of myGraph.nodes) {
         solution[node.name] = node.type
     }
-    //console.log(solution)
 
 
     for (let node of myGraph.nodes) {
@@ -188,7 +187,6 @@ function createStartingBoard(numOfExtraNodesToConnect=0) {
     for (let node of myGraph.nodes) {
         original[node.name] = node.type
     }
-    //console.log(original)
 
 
     return myGraph;

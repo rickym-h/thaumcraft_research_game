@@ -40,10 +40,7 @@ class Graph {
         while (myQueue.length > 0) {
             let currentNode = myQueue.shift();
             let adjacentNodes = this.get_adjacent_nodes(currentNode);
-            console.log(adjacentNodes)
             adjacentNodes = adjacentNodes.filter((n)=> {
-                console.log("adjacentNode: " + n)
-                console.log("currentNode: " + currentNode)
                 if (this.get_node_from_name(n).type === "empty") {
                     return false;
                 }
@@ -60,12 +57,10 @@ class Graph {
         for (let startingNode of myStartingNodes) {
             if (!visited.includes(startingNode)) {
                 this.complete = false;
-                console.log("false")
                 return;
             }
         }
         this.complete = true;
-        console.log("true")
     }
 
 
@@ -101,23 +96,6 @@ class Graph {
         for (let node of this.nodes) {
             node.type = input[node.name];
         }
-    }
-
-    printGraph() {
-        console.log("printing graph:")
-        for (let node of this.nodes) {
-            let start = node;
-            if (this.edges[node] === []) {
-                continue;
-            }
-            let target = "";
-            for (let targetNode of this.edges[node]) {
-                target += targetNode + " ";
-            }
-            console.log(start + " -> " + target);
-        }
-        console.log("Nodes: " + this.num_of_nodes);
-        console.log("Edges: " + this.num_of_edges);
     }
 
     getChainOfNodesStartingFrom(startingNode, chainLength = 6) {
