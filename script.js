@@ -11,7 +11,7 @@ function getDivInfoOfAspect(aspect) {
     myImg.id = aspect
     myDiv.appendChild(myImg);
 
-    let head = document.createElement("h4");
+    let head = document.createElement("p");
     head.textContent = aspect_translations[aspect];
     myDiv.appendChild(head);
 
@@ -268,6 +268,13 @@ function initBoard(graph) {
             hexRow.appendChild(hex);
         }
         board.appendChild(hexRow);
+    }
+
+    for (let key of Object.keys(original)) {
+        if (original[key] !== "empty") {
+            updateInfoPanel(original[key])
+            break;
+        }
     }
 }
 
