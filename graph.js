@@ -60,8 +60,7 @@ class Graph {
         }
     }
 
-    printGraph()
-    {
+    printGraph() {
         console.log("printing graph:")
         for (let node of this.nodes) {
             let start = node;
@@ -112,6 +111,22 @@ class Graph {
             }
         }
         return longestSoFar
+    }
+
+    canPlaceNode(node, aspect) {
+        let adjacentNodes = this.get_adjacent_nodes(node.name);
+        console.log(adjacentNodes)
+        let possibleAdjacentAspects = aspect_graph.edges[aspect];
+        console.log(possibleAdjacentAspects)
+        for (let neighbourNode of adjacentNodes) {
+            let nodeToCheck = this.get_node_from_name(neighbourNode);
+            if (possibleAdjacentAspects.includes(nodeToCheck.type)) {
+                console.log("returning true")
+                return true;
+            }
+        }
+        console.log("returning false")
+        return false;
     }
 
 }

@@ -1,14 +1,24 @@
+let currentDraggedAspect = null;
+
 let aspect_selector = document.getElementById("aspect_selector");
-let count = 0;
 for (let aspect of aspect_graph.nodes) {
+
     let filepath = "aspect_images/" + getImageName(aspect);
     let myImg = document.createElement("img");
     myImg.src = filepath;
     myImg.id = aspect
+
+    myImg.addEventListener('dragstart', dragStart);
+    function dragStart(e) {
+        console.log("PICKED UP")
+        currentDraggedAspect = myImg.id;
+        console.log(currentDraggedAspect);
+    }
+
+    myImg.classList.toggle("aspect_image")
+
     aspect_selector.appendChild(myImg);
-    count++
 }
-console.log(count)
 
 let original;
 let solution;
@@ -127,10 +137,43 @@ function initBoard(graph) {
         for (let currentNode of row) {
             let hex = document.createElement("div");
             hex.classList.toggle("hex");
+
+            hex.id=currentNode.name
+
             let t = document.createElement("div");
             t.classList.toggle("top");
             let m = document.createElement("div");
             m.classList.toggle("middle");
+
+            m.ondragover = function(e) {
+                e.preventDefault();
+            }
+
+            m.ondrop = function(e) {
+                let targetNode = e.target;
+                let parentNode = targetNode.parentNode;
+
+                let currentNode = graph.get_node_from_name(parentNode.id)
+
+                if (parentNode.classList.contains("hex") && (!graph.complete) && (currentNode.type === "empty") && (graph.canPlaceNode(currentNode, currentDraggedAspect))) {
+                    console.log("VALID")
+                    // update graph
+                    currentNode.type = currentDraggedAspect;
+
+                    // update board
+                    let filepath = "aspect_images/" + getImageName(currentDraggedAspect);
+                    let myImg = document.createElement("img");
+
+                    myImg.src = filepath;
+                    myImg.id = currentDraggedAspect
+
+                    targetNode.appendChild(myImg);
+                    // check if graph is complete
+                    console.log(graph)
+                }
+            }
+
+
             let b = document.createElement("div");
             b.classList.toggle("bottom");
 
@@ -149,8 +192,9 @@ function initBoard(graph) {
                     initBoard(graph);
                 }
 
-                // check if the board is complete and update graph.complete
+                // todo check if the board is complete and update graph.complete
             })
+
 
 
             hex.appendChild(t);
@@ -187,4 +231,8 @@ solve_board_button.addEventListener("click", function() {
     graph.set_nodes_to_dict(solution)
     graph.complete = true;
     initBoard(graph)
+})
+
+document.addEventListener("drop", function() {
+    currentDraggedAspect = null;
 })
